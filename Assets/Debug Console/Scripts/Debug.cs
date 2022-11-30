@@ -8,18 +8,15 @@ namespace SampleCode
         [Conditional("UNITY_DEBUG")]
         public static void Log(int newLine_)
         {
-#if UNITY_DEBUG
             for (int i = 0; i < newLine_; ++i)
             {
                 SampleCode.Log.Push(string.Empty);
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(string message_, int newLine_ = 0)
         {
-#if UNITY_DEBUG
             for (int i = 0; i < newLine_; ++i)
             {
                 SampleCode.Log.Push(string.Empty);
@@ -32,13 +29,11 @@ namespace SampleCode
 #else
             UnityEngine.Debug.unityLogger.Log("EH.Debug", message);
 #endif
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(BattleTurn turn_, string message_ = "")
         {
-#if UNITY_DEBUG
             if (turn_ != null)
             {
                 System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -52,13 +47,11 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(BattleTurnManager manager_, string message_)
         {
-#if UNITY_DEBUG
             if (manager_ != null)
             {
                 System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -106,13 +99,11 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(BattleTriggerManager manager_, string message_, int newLine_ = 0)
         {
-#if UNITY_DEBUG
             if (manager_ != null)
             {
                 System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -142,7 +133,6 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
             }
-#endif
         }
 
         /// <summary>
@@ -154,7 +144,6 @@ namespace SampleCode
         [Conditional("UNITY_DEBUG")]
         public static void Log(UnitBattleActor character_, string nextState_, bool force_)
         {
-#if UNITY_DEBUG
             if (character_ != null)
             {
                 string message = (force_ ? "[ForceChangeState] " : "[ChangeState] ") + string.Format("{0}({1}) {2} -> {3}", character_.name, character_.TeamCodeDebugText, character_.GetCurrentStateName(), nextState_);
@@ -165,13 +154,11 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", message);
 #endif
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(BattleProcessor processor_, string message_ = "")
         {
-#if UNITY_DEBUG
             if (processor_ != null)
             {
                 System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -191,13 +178,11 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void Log(BattleJudgementManager manager_, string message_ = "")
         {
-#if UNITY_DEBUG
             if (manager_ != null)
             {
                 System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -220,26 +205,22 @@ namespace SampleCode
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void LogError(string message_)
         {
-#if UNITY_DEBUG
             //UnityEditor.EditorApplication.isPaused = true;
 
 #if UNITY_EDITOR
             SampleCode.Log.Push($"<color=red>{message_}</color>", SampleCode.Log.Category.Error);
 #endif
             UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void LogUniqueError(string message_)
         {
-#if UNITY_DEBUG
             //UnityEditor.EditorApplication.isPaused = true;
 
 #if UNITY_EDITOR
@@ -248,18 +229,15 @@ namespace SampleCode
             {
                 UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
             }
-#endif
         }
 
         [Conditional("UNITY_DEBUG")]
         public static void LogLua(string message_)
         {
-#if UNITY_DEBUG
 #if UNITY_EDITOR
             SampleCode.Log.Push(message_, SampleCode.Log.Category.Lua);
 #else
             UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
-#endif
 #endif
         }
     }
