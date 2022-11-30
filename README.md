@@ -6,4 +6,4 @@ Menu > Sample Code > Debug Console
 
 ## Character Preview
 Menu > Sample Code > Character Preview
-![](Console_Screenshot.png)
+![](Preview_Screenshot.png)
