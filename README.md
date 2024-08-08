@@ -10,4 +10,4 @@ Menu > Sample Code > Character Preview
 
 ## FanArt FileViewer
 ClimbGames > FanArt Viewer
-![](FanArt Viewer.png)
+![](FanArtViewer.png)
