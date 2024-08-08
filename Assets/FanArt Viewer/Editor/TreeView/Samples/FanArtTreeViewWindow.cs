@@ -184,6 +184,7 @@ namespace ClimbGames.Client
 
                 MultiColumnHeader columnHeader = FanArtTreeView.GetMultiColumnHeader(ref columnHeaderState, FanArtTreeView.CreateHeaderColumns());
                 treeView = new FanArtTreeView(treeViewState, columnHeader, treeModel);
+                treeView.ExpandAll();
             }
 
             if (manipulator == null)

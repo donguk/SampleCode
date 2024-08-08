@@ -1,0 +1,22 @@
+{
+    "files": [
+        {
+            "title": "6591148fa29b09fe290e6eb56abcc1c7",
+            "author": "",
+            "assetPath": "Assets/FanArt Viewer/Resources/FanArt/Season1/6591148fa29b09fe290e6eb56abcc1c7.jpg",
+            "dateTime": "2024-08-08T03:08:28Z"
+        },
+        {
+            "title": "eee849252d19990f13ada6f421dc9c42",
+            "author": "",
+            "assetPath": "Assets/FanArt Viewer/Resources/FanArt/Season2/eee849252d19990f13ada6f421dc9c42.jpg",
+            "dateTime": "2024-08-08T03:08:28Z"
+        },
+        {
+            "title": "6c8a82ea228b22d60dfe415fd91f1dcd",
+            "author": "",
+            "assetPath": "Assets/FanArt Viewer/Resources/FanArt/Season1/6c8a82ea228b22d60dfe415fd91f1dcd.jpg",
+            "dateTime": "2024-08-08T03:08:28Z"
+        }
+    ]
+}
