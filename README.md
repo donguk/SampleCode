@@ -7,3 +7,7 @@ Menu > Sample Code > Debug Console
 ## Character Preview
 Menu > Sample Code > Character Preview
 ![](Preview_Screenshot.png)
+
+## FanArt FileViewer
+ClimbGames > FanArt Viewer
+![](FanArt Viewer.png)
