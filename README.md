@@ -10,4 +10,5 @@ Menu > Sample Code > Character Preview
 
 ## FanArt FileViewer
 ClimbGames > FanArt Viewer
+To Add FanArt File, drag files from project window to Viewer Window and drop files!
 ![](FanArtViewer.png)
