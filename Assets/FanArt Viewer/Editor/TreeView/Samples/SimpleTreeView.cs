@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace ClimbGames.Client
+namespace ClimbGames.Editor
 {
-    class SimpleTreeView : TreeView<TreeData>
+    class SimpleTreeView : TreeView<TreeElement>
     {
-        public SimpleTreeView(TreeViewState state, TreeModel<TreeData> model) : base(state, model)
+        public SimpleTreeView(TreeViewState<int> state, TreeModel<TreeElement> model) : base(state, model)
         {
-            
+
         }
     }
 }

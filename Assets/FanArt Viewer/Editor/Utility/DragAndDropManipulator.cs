@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace ClimbGames.Client
+namespace ClimbGames.Editor
 {
     public class DragAndDropManipulator
     {
@@ -15,7 +15,7 @@ namespace ClimbGames.Client
 
         public bool IsDragArea => DragAndDrop.visualMode == DragAndDropVisualMode.Copy;
         public bool IsDragPerform { get; private set; }
-  
+
         public DragAndDropManipulator(string style)
         {
             dropStyle = new GUIStyle(style)
@@ -41,9 +41,9 @@ namespace ClimbGames.Client
             hierarchyObjects.Clear();
             projectObjects.Clear();
         }
-         
+
         void PerformDrag()
-        {        
+        {
             // GameObjects from hierarchy.
             if (DragAndDrop.paths.Length == 0 && DragAndDrop.objectReferences.Length > 0)
             {

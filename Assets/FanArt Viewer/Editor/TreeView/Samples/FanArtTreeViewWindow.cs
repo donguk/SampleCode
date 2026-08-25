@@ -7,7 +7,7 @@ using System.Linq;
 using System;
 //using UnityEditor.TreeViewExamples;
 
-namespace ClimbGames.Client
+namespace ClimbGames.Editor
 {
     [Serializable]
     public class FanArtData
@@ -58,17 +58,17 @@ namespace ClimbGames.Client
     }
 
     public class FanArtTreeViewWindow : EditorWindow
-    {        
+    {
         const string FanArtStoragePath = "Assets/ClimbGames/Resources/FanArt/FanArtData.txt";
         Dictionary<string/*guid*/, FanArtData> fanArtInfos;
 
-        TreeModel<FanArtTreeData> treeModel;
+        TreeModel<FanArtTreeElement> treeModel;
         FanArtTreeView treeView;
-        TreeViewState treeViewState = new TreeViewState();
+        TreeViewState<int> treeViewState = new TreeViewState<int>();
         MultiColumnHeaderState columnHeaderState;
         Rect treeViewRect;
         DragAndDropManipulator manipulator;
-        
+
         void LoadFromJson()
         {
             if (fanArtInfos == null)
@@ -80,7 +80,7 @@ namespace ClimbGames.Client
             //if (asset != null)
             if (System.IO.File.Exists(FanArtStoragePath))
                 json = System.IO.File.ReadAllText(FanArtStoragePath, System.Text.Encoding.UTF8);
-            
+
             if (string.IsNullOrEmpty(json) == false)
             {
                 FanArtStorage data = JsonUtility.FromJson<FanArtStorage>(json);
@@ -91,16 +91,16 @@ namespace ClimbGames.Client
                         string guid = AssetDatabase.AssetPathToGUID(data.files[i].assetPath);
                         if (fanArtInfos.TryGetValue(guid, out FanArtData fanArt) == false)
                             fanArtInfos.Add(guid, fanArt = data.files[i]);
-                        
+
                         fanArt.Initialize();
                     }
                 }
             }
         }
 
-        List<FanArtTreeData> BuildTreeData(List<FanArtData> list)
+        List<FanArtTreeElement> BuildTreeData(List<FanArtData> list)
         {
-            list.Sort((lhs, rhs) => 
+            list.Sort((lhs, rhs) =>
             {
                 if (lhs.Depth == rhs.Depth)
                     return string.Compare(lhs.assetPath, rhs.assetPath);
@@ -108,7 +108,7 @@ namespace ClimbGames.Client
             });
 
             int id = 0;
-            List<FanArtTreeData> datas = new List<FanArtTreeData>() { new FanArtTreeData("root", -1, id++) };
+            List<FanArtTreeElement> datas = new List<FanArtTreeElement>() { new FanArtTreeElement("root", -1, id++) };
             List<HashSet<string>> folders = new List<HashSet<string>>();
 
             for (int i = 0; i < list.Count; ++i)
@@ -124,11 +124,11 @@ namespace ClimbGames.Client
                                 folders.Add(new HashSet<string>());
 
                             if (folders[depth].Add(values[depth]))
-                                datas.Add(new FanArtTreeData(values[depth], depth, id++));
+                                datas.Add(new FanArtTreeElement(values[depth], depth, id++));
                         }
                         else // file
                         {
-                            datas.Add(new FanArtTreeData(list[i].title, depth, id++) { fanArt = list[i] });
+                            datas.Add(new FanArtTreeElement(list[i].title, depth, id++) { data = list[i] });
                         }
                     }
                 }
@@ -163,10 +163,10 @@ namespace ClimbGames.Client
                 string guid = AssetDatabase.AssetPathToGUID(assetPaths[i]);
                 if (fanArtInfos.TryGetValue(guid, out var fanArtData) == false)
                     fanArtInfos.Add(guid, fanArtData = new FanArtData(assetPaths[i]));
-                
+
                 fanArtData.Initialize();
             }
-            
+
             treeModel.SetData(BuildTreeData(fanArtInfos.Values.ToList()));
             treeView.Reload();
         }
@@ -178,7 +178,7 @@ namespace ClimbGames.Client
                 if (treeModel == null)
                 {
                     LoadFromJson();
-                    treeModel = new TreeModel<FanArtTreeData>(BuildTreeData(fanArtInfos.Values.ToList()));
+                    treeModel = new TreeModel<FanArtTreeElement>(BuildTreeData(fanArtInfos.Values.ToList()));
                     treeModel.modelChanged += OnModelChanged;
                 }
 
@@ -194,18 +194,18 @@ namespace ClimbGames.Client
         void OnModelChanged()
         {
             fanArtInfos.Clear();
-            Stack<FanArtTreeData> stack = new Stack<FanArtTreeData>();
+            Stack<FanArtTreeElement> stack = new Stack<FanArtTreeElement>();
             stack.Push(treeModel.root);
             while (stack.Count > 0)
             {
-                FanArtTreeData parent = stack.Pop();
-                if (parent.fanArt != null)
-                    fanArtInfos[AssetDatabase.AssetPathToGUID(parent.fanArt.assetPath)] = parent.fanArt;
+                FanArtTreeElement parent = stack.Pop();
+                if (parent.data != null)
+                    fanArtInfos[AssetDatabase.AssetPathToGUID(parent.data.assetPath)] = parent.data;
 
                 if (parent.hasChildren)
                 {
                     for (int i = 0; i < parent.children.Count; ++i)
-                        stack.Push(parent.children[i] as FanArtTreeData);
+                        stack.Push(parent.children[i] as FanArtTreeElement);
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace ClimbGames.Client
             try
             {
                 FanArtStorage data = new FanArtStorage(fanArtInfos);
-                data.files.Sort((lhs, rhs) => 
+                data.files.Sort((lhs, rhs) =>
                 {
                     int diff = DateTime.Compare(rhs.DateTime, lhs.DateTime);
                     if (diff == 0)

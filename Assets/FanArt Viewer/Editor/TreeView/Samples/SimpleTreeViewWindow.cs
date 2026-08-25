@@ -6,14 +6,14 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine.UIElements;
 
-namespace ClimbGames.Client
+namespace ClimbGames.Editor
 {
     public class SimpleTreeViewWindow : EditorWindow
     {
-        TreeModel<TreeData> treeModel;
+        TreeModel<TreeElement> treeModel;
         SimpleTreeView treeView;
-        TreeViewState treeViewState = new TreeViewState();
-        
+        TreeViewState<int> treeViewState = new TreeViewState<int>();
+
         Rect treeViewRect;
         DragAndDropManipulator manipulator;
 
@@ -21,17 +21,17 @@ namespace ClimbGames.Client
         {
             if (treeView == null)
             {
-                List<TreeData> datas = new List<TreeData>()
+                List<TreeElement> datas = new List<TreeElement>()
                 {
-                    new TreeData("root", -1, 0),
-                    new TreeData("aa", 0, 1),
-                    new TreeData("bb", 1, 2),
-                    new TreeData("cc", 1, 3),
-                    new TreeData("dd", 0, 4),
-                    new TreeData("ee", 1, 5),
+                    new TreeElement("root", -1, 0),
+                    new TreeElement("aa", 0, 1),
+                    new TreeElement("bb", 1, 2),
+                    new TreeElement("cc", 1, 3),
+                    new TreeElement("dd", 0, 4),
+                    new TreeElement("ee", 1, 5),
                 };
 
-                treeModel = new TreeModel<TreeData>(datas);
+                treeModel = new TreeModel<TreeElement>(datas);
                 treeView = new SimpleTreeView(treeViewState, treeModel);
             }
 
@@ -46,11 +46,11 @@ namespace ClimbGames.Client
             if (manipulator != null)
             {
                 manipulator.ProcessEvent();
-                
+
                 //
                 //
             }
-            
+
             if (treeView != null)
             {
                 treeViewRect.width = position.width;

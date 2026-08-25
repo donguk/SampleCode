@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using UnityEditor;
 
 
-namespace UnityEditor.TreeViewExamples
+namespace ClimbGames.Editor
 {
 
 	// TreeElementUtility and TreeElement are useful helper classes for backend tree data structures.
@@ -42,7 +43,7 @@ namespace UnityEditor.TreeViewExamples
 		public static T ListToTree<T>(IList<T> list) where T : TreeElement
 		{
 			// Validate input
-			ValidateDepthValues (list);
+			ValidateDepthValues(list);
 
 			// Clear old states
 			foreach (var element in list)
@@ -177,7 +178,7 @@ namespace UnityEditor.TreeViewExamples
 	{
 		class TestElement : TreeElement
 		{
-			public TestElement (string name, int depth)
+			public TestElement(string name, int depth)
 			{
 				this.name = name;
 				this.depth = depth;
@@ -261,7 +262,7 @@ namespace UnityEditor.TreeViewExamples
 
 			// Assert
 			Assert.IsTrue(catchedException, "We require the root.depth to be -1, here it is: " + list[0].depth);
-		
+
 		}
 
 		[Test]
@@ -278,30 +279,30 @@ namespace UnityEditor.TreeViewExamples
 			list.Add(b1);
 			list.Add(b2);
 
-			var c0 = new TestElement ("C", 0);
+			var c0 = new TestElement("C", 0);
 			list.Add(c0);
-		
+
 			var f0 = new TestElement("F", 0);
 			var f1 = new TestElement("Fchild", 1);
 			var f2 = new TestElement("Fchildchild", 2);
 			list.Add(f0);
 			list.Add(f1);
 			list.Add(f2);
-		
+
 			// Init tree structure: set children and parent properties
 			TreeElementUtility.ListToTree(list);
 
-	
+
 			// Single element
-			TestElement[] input = {b1};
-			TestElement[] expectedResult = {b1};
+			TestElement[] input = { b1 };
+			TestElement[] expectedResult = { b1 };
 			var result = TreeElementUtility.FindCommonAncestorsWithinList(input).ToArray();
 			Assert.IsTrue(ArrayUtility.ArrayEquals(expectedResult, result), "Single input should return single output");
 
 			// Single sub tree
-			input = new[] {b1, b2};
-			expectedResult = new[] {b1};
-			result = TreeElementUtility.FindCommonAncestorsWithinList (input).ToArray ();
+			input = new[] { b1, b2 };
+			expectedResult = new[] { b1 };
+			result = TreeElementUtility.FindCommonAncestorsWithinList(input).ToArray();
 			Assert.IsTrue(ArrayUtility.ArrayEquals(expectedResult, result), "Common ancestor should only be b1 ");
 
 			// Multiple sub trees
@@ -311,7 +312,7 @@ namespace UnityEditor.TreeViewExamples
 			Assert.IsTrue(ArrayUtility.ArrayEquals(expectedResult, result), "Common ancestor should only be b0, f0, c0");
 		}
 
-		#endregion	
+		#endregion
 	}
 
 

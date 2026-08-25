@@ -4,24 +4,24 @@ using UnityEngine;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor;
 
-namespace ClimbGames.Client
+namespace ClimbGames.Editor
 {
-    public class FanArtTreeData : TreeData
+    public class FanArtTreeElement : TreeElement
     {
-        public FanArtData fanArt;
+        public FanArtData data;
 
-        public FanArtTreeData(string name, int depth, int id) : base(name, depth, id)
+        public FanArtTreeElement(string name, int depth, int id) : base(name, depth, id)
         {
 
         }
     }
 
-    class FanArtTreeView : TreeView<FanArtTreeData>
+    class FanArtTreeView : TreeView<FanArtTreeElement>
     {
         const float customRowHeight = 20f;
         const float rowIconWidth = 20f;
 
-        public FanArtTreeView(TreeViewState state, MultiColumnHeader header, TreeModel<FanArtTreeData> model) : base(state, header, model, false, true)
+        public FanArtTreeView(TreeViewState<int> state, MultiColumnHeader header, TreeModel<FanArtTreeElement> model) : base(state, header, model, false, true)
         {
             rowHeight = customRowHeight;
             columnIndexForTreeFoldouts = 1;
@@ -30,80 +30,80 @@ namespace ClimbGames.Client
             showAlternatingRowBackgrounds = true;
         }
 
-        protected override void OnCellGUI(Rect cellRect, TreeViewItem item, FanArtTreeData data, int column, ref RowGUIArgs args)
+        protected override void OnCellGUI(Rect cellRect, TreeViewItem item, FanArtTreeElement element, int column, ref RowGUIArgs args)
         {
             CenterRectUsingSingleLineHeight(ref cellRect);
             switch (column)
             {
                 case 0:
-                {
-                    //if (data.info == null)
-                    //    GUI.DrawTexture(cellRect, EditorGUIUtility.FindTexture("Folder Icon"), ScaleMode.ScaleToFit);
-                    break;
-                }
-                case 1:
-                {
-                    if (data.fanArt == null)
                     {
-                        Rect rect = cellRect;
-                        rect.x += GetContentIndent(item);
-                        rect.width = 20f;
-                        GUI.DrawTexture(rect, EditorGUIUtility.FindTexture(IsExpanded(data.id) ? "FolderOpened Icon" : "Folder Icon"), ScaleMode.ScaleToFit);
+                        //if (data.info == null)
+                        //    GUI.DrawTexture(cellRect, EditorGUIUtility.FindTexture("Folder Icon"), ScaleMode.ScaleToFit);
+                        break;
                     }
-                    
-                    args.rowRect = cellRect;
-                    base.OnRowGUI(cellRect, item, data, ref args);
-                    break;
-                }
+                case 1:
+                    {
+                        if (element != null)
+                        {
+                            Rect rect = cellRect;
+                            rect.x += GetContentIndent(item);
+                            rect.width = 20f;
+                            GUI.DrawTexture(rect, EditorGUIUtility.FindTexture(IsExpanded(element.id) ? "FolderOpened Icon" : "Folder Icon"), ScaleMode.ScaleToFit);
+                        }
+
+                        args.rowRect = cellRect;
+                        base.OnRowGUI(cellRect, item, element, ref args);
+                        break;
+                    }
 
                 case 2:
-                {
-                    if (data.fanArt != null)
-                        data.fanArt.author = GUI.TextField(cellRect, data.fanArt.author);
-                    break;
-                }
+                    {
+                        if (element != null && element.data != null)
+                            element.data.author = GUI.TextField(cellRect, element.data.author);
+                        break;
+                    }
 
                 case 3:
-                {
-                    if (data.fanArt != null)
-                        GUI.DrawTexture(cellRect, AssetDatabase.GetCachedIcon(data.fanArt.assetPath), ScaleMode.ScaleToFit);
-                    break;
-                }
+                    {
+                        if (element != null && element.data != null)
+                            GUI.DrawTexture(cellRect, AssetDatabase.GetCachedIcon(element.data.assetPath), ScaleMode.ScaleToFit);
+                        break;
+                    }
 
                 case 4:
-                {
-                    if (data.fanArt != null)
-                        GUI.Label(cellRect, data.fanArt.assetPath);
-                    break;
-                }
+                    {
+                        if (element != null && element.data != null)
+                            GUI.Label(cellRect, element.data.assetPath);
+                        break;
+                    }
             }
         }
 
-        protected override bool CanRenameData(FanArtTreeData data)
+        protected override bool CanRenameData(FanArtTreeElement element)
         {
-            if (data.fanArt == null)
+            if (element.data == null)
                 return false;
 
-            return base.CanRenameData(data);
+            return base.CanRenameData(element);
         }
 
-        protected override Rect GetRenameRect(Rect rowRect, int row, TreeViewItem item)
-		{
-			Rect cellRect = GetCellRectForTreeFoldouts(rowRect);
-			CenterRectUsingSingleLineHeight(ref cellRect);
-			return base.GetRenameRect(cellRect, row, item);
-		}
+        protected override Rect GetRenameRect(Rect rowRect, int row, TreeViewItem<int> item)
+        {
+            Rect cellRect = GetCellRectForTreeFoldouts(rowRect);
+            CenterRectUsingSingleLineHeight(ref cellRect);
+            return base.GetRenameRect(cellRect, row, item);
+        }
 
-        protected override void OnRenameEnded(FanArtTreeData element, RenameEndedArgs args)
+        protected override void OnRenameEnded(FanArtTreeElement element, RenameEndedArgs args)
         {
             base.OnRenameEnded(element, args);
-            element.fanArt.title = args.newName;
-		}
+            element.data.title = args.newName;
+        }
 
         protected override void ContextClicked()
         {
             Vector2 position = Event.current.mousePosition;
-            EditorUtility.DisplayCustomMenu(new Rect(position.x, position.y, 0, 0), new GUIContent[] 
+            EditorUtility.DisplayCustomMenu(new Rect(position.x, position.y, 0, 0), new GUIContent[]
             {
                 new GUIContent("Remove"),
             }, -1, OnSelectContextMenu, null);
@@ -117,13 +117,13 @@ namespace ClimbGames.Client
 
         protected override void SelectionChanged(IList<int> selectedIds)
         {
-            IList<FanArtTreeData> datas = FindDatas(selectedIds);
+            IList<FanArtTreeElement> datas = FindDatas(selectedIds);
             List<Object> objects = new List<Object>();
             for (int i = 0; i < datas.Count; ++i)
             {
-                if (datas[i].fanArt != null)
+                if (datas[i].data != null)
                 {
-                    Object obj = AssetDatabase.LoadAssetAtPath<Object>(datas[i].fanArt.assetPath);
+                    Object obj = AssetDatabase.LoadAssetAtPath<Object>(datas[i].data.assetPath);
                     if (obj != null)
                         objects.Add(obj);
                 }

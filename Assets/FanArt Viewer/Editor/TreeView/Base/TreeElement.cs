@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace UnityEditor.TreeViewExamples
+namespace ClimbGames.Editor
 {
-
 	[Serializable]
 	public class TreeElement
 	{
@@ -40,19 +38,21 @@ namespace UnityEditor.TreeViewExamples
 
 		public string name
 		{
-			get { return m_Name; } set { m_Name = value; }
+			get { return m_Name; }
+			set { m_Name = value; }
 		}
 
 		public int id
 		{
-			get { return m_ID; } set { m_ID = value; }
+			get { return m_ID; }
+			set { m_ID = value; }
 		}
 
-		public TreeElement ()
+		public TreeElement()
 		{
 		}
 
-		public TreeElement (string name, int depth, int id)
+		public TreeElement(string name, int depth, int id)
 		{
 			m_Name = name;
 			m_ID = id;
