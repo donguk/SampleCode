@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SampleCode
+namespace CustomTool
 {
     public static class Log
     {
@@ -124,7 +124,7 @@ namespace SampleCode
         {
             Clear();
 
-            SampleCode.Bitwise.AddRef(ref Categories, (int)Category.Debug);
+            CustomTool.Bitwise.AddRef(ref Categories, (int)Category.Debug);
 
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
 

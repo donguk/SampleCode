@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SampleCode
+namespace CustomTool
 {
     public static class Bitwise
     {
         public static bool Check(int a_, int b_)
         {
-            return (a_ & b_) > 0; 
+            return (a_ & b_) > 0;
         }
 
         public static bool Equals(int a_, int b_)

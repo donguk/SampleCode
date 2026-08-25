@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace SampleCode
+namespace CustomTool
 {
     [ExecuteInEditMode]
     public class CharacterPreviewWindow : EditorWindow
     {
         private GUISkin cpSkin;
-        
+
         private float panelSizeRatio = 0.5f;
         private bool isResizingPanel = false;
         private Rect tabPanel, previewPanel, resizer, cameraRect;
@@ -17,7 +17,7 @@ namespace SampleCode
         enum Tab { Character, Animation }
         private int tabValue = 0;
         private Dictionary<int/*Tab*/, TabContent> tabContentsDic = new Dictionary<int, TabContent>();
-        
+
         private GameObject charObj = null;
         private Animator charAnimator = null;
         private AnimationClip animationClip = null;
@@ -38,7 +38,7 @@ namespace SampleCode
             }
         }
         private CameraOptions cameraOptions;
-        
+
         private PreviewRenderUtility previewRenderUtility;
         private GameObject previewObject;
         private GameObject previewPlane;
@@ -48,7 +48,7 @@ namespace SampleCode
         private float clipProgressValue = 0f, clipSpeedValue = 1f;
         private double lastTimeSinceStartup = 0f;
 
-        [MenuItem("Sample Code/Character Preview", false, 2)]
+        [MenuItem("Custome Tools/Character Preview", false, 2)]
         public static void ShowWindow()
         {
             GetWindow<CharacterPreviewWindow>();
@@ -57,7 +57,7 @@ namespace SampleCode
         private void OnEnable()
         {
             titleContent = new GUIContent("Preview");
-            
+
             cpSkin = AssetDatabase.LoadAssetAtPath("Assets/Character Preview/Editor/CPSkin.guiskin", typeof(GUISkin)) as GUISkin;
             animatorController = AssetDatabase.LoadAssetAtPath("Assets/Character Preview/Res/PreviewController.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
 
@@ -65,12 +65,12 @@ namespace SampleCode
             (tabContentsDic[(int)Tab.Animation] = new AnimationTabContent()).onChangeAsset.AddListener(OnChangeAnimationClip);
 
             (cameraOptions = new CameraOptions()).Reset(Vector3.zero);
-            
+
             previewRenderUtility = new PreviewRenderUtility(true);
             previewRenderUtility.camera.fieldOfView = 30f;
             previewRenderUtility.camera.nearClipPlane = 0.3f;
             previewRenderUtility.camera.farClipPlane = 1000f;
-            
+
             if (previewRenderUtility.lights[0] != null)
             {
                 previewRenderUtility.lights[0].transform.rotation = Quaternion.Euler(50f, -30f, 0f);
@@ -81,12 +81,12 @@ namespace SampleCode
             {
                 previewPlane = previewRenderUtility.InstantiatePrefabInScene(plane as GameObject);
             }
-            
+
             OnChangeCharacter(charObj);
 
             isPlayingAnimation = false;
             animationClip = null;
-            
+
             if (AnimationMode.InAnimationMode())
             {
                 AnimationMode.StopAnimationMode();
@@ -123,7 +123,7 @@ namespace SampleCode
         {
             Repaint();
         }
-        
+
         private void Update()
         {
             if (tabContentsDic.TryGetValue(tabValue, out TabContent tabContent))
@@ -134,7 +134,7 @@ namespace SampleCode
                 }
             }
 
-            if (charObj == null || charAnimator == null || charAnimator.runtimeAnimatorController == null || animationClip == null) 
+            if (charObj == null || charAnimator == null || charAnimator.runtimeAnimatorController == null || animationClip == null)
                 return;
 
             if (isPlayingAnimation)
@@ -150,7 +150,7 @@ namespace SampleCode
                     }
                     clipProgressValue = Mathf.InverseLerp(0f, animationClip.length, animationTime);
                 }
-                
+
                 lastTimeSinceStartup = EditorApplication.timeSinceStartup;
             }
             else
@@ -167,17 +167,17 @@ namespace SampleCode
         }
 
         public virtual void OnGUI()
-        {            
+        {
             ProcessEvents(Event.current);
-            
+
             DrawTabPanel();
             DrawPreviewPanel();
             DrawResizer();
-            
+
             if (GUI.changed || isResizingPanel || isPlayingAnimation || cameraOptions.isChanging)
             {
                 Repaint();
-            }            
+            }
         }
 
         private void ProcessEvents(Event e)
@@ -190,19 +190,19 @@ namespace SampleCode
                         {
                             isResizingPanel = true;
                         }
-                        
+
                         if (cameraRect.Contains(e.mousePosition))
                         {
                             cameraOptions.isChanging = true;
                         }
-                        
+
                         break;
                     }
 
                 case EventType.MouseUp:
                     {
                         isResizingPanel = cameraOptions.isChanging = false;
-                        
+
                         break;
                     }
 
@@ -296,7 +296,7 @@ namespace SampleCode
             float toolbarHeight = 46f;
             cameraRect = new Rect(previewPanel.x, previewPanel.y + toolbarHeight, previewPanel.width, previewPanel.height - toolbarHeight);
 
-            previewRenderUtility.BeginPreview(cameraRect, "window");            
+            previewRenderUtility.BeginPreview(cameraRect, "window");
             previewRenderUtility.camera.Render();
             previewRenderUtility.EndAndDrawPreview(cameraRect);
 
@@ -310,17 +310,17 @@ namespace SampleCode
 
             GUILayout.Space(2f);
             GUILayout.BeginHorizontal("Toolbar");
-            
+
             var playButtonContent = EditorGUIUtility.IconContent("PlayButton");
             var pauseButtonContent = EditorGUIUtility.IconContent("PauseButton");
             isPlayingAnimation = GUILayout.Toggle(isPlayingAnimation, isPlayingAnimation ? pauseButtonContent : playButtonContent, "ToolbarButton", GUILayout.Width(30f));
-            
+
             clipProgressValue = GUILayout.HorizontalSlider(clipProgressValue, 0f, 1f, cpSkin.GetStyle("clipSlider"), cpSkin.GetStyle("clipSliderThumb"), GUILayout.Height(20f));
             if (animationClip != null)
             {
                 animationTime = Mathf.Lerp(0f, animationClip.length, clipProgressValue);
             }
-            
+
             GUILayout.Space(4f);
             clipSpeedValue = GUILayout.HorizontalSlider(clipSpeedValue, 0.1f, 2f, GUILayout.Width(100f));
             GUILayout.Label($"{clipSpeedValue:0.00}x", GUILayout.Width(35f));
@@ -347,7 +347,7 @@ namespace SampleCode
             {
                 UpdatePreviewCamera();
             }
-            
+
             GUILayout.EndVertical();
             GUILayout.Space(10f);
 
@@ -381,15 +381,15 @@ namespace SampleCode
         private Bounds UpdateBounds(GameObject obj)
         {
             Bounds bounds = new Bounds();
-            
+
             if (obj != null)
             {
                 bounds = new Bounds(obj.transform.position, Vector3.zero);
 
-                //¸ðµç Renderer ÄÄÆ÷³ÍÆ®¸¦ ¾ò¾î¿É´Ï´Ù
+                //ï¿½ï¿½ï¿½ Renderer ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½É´Ï´ï¿½
                 foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
                 {
-                    //°¡Àå Å« Bounds¸¦ ¾ò¾î¿É´Ï´Ù
+                    //ï¿½ï¿½ï¿½ï¿½ Å« Boundsï¿½ï¿½ ï¿½ï¿½ï¿½É´Ï´ï¿½
                     bounds.Encapsulate(renderer.bounds);
                 }
             }
@@ -431,7 +431,7 @@ namespace SampleCode
         {
             charObj = obj as GameObject;
             charAnimator = charObj?.GetComponent<Animator>();
-            
+
             if (charAnimator != null)
             {
                 if (charAnimator.runtimeAnimatorController == null)
@@ -525,7 +525,7 @@ namespace SampleCode
             protected string rootPath = "Assets/Character Preview", searchPatterns;
             protected List<string> filePaths;
             protected List<AssetContent> assetList, contentList;
-            
+
             public Object asset;
             protected System.Type assetType = typeof(Object);
             public UnityEngine.Events.UnityEvent<Object> onChangeAsset = new UnityEngine.Events.UnityEvent<Object>();
@@ -545,7 +545,7 @@ namespace SampleCode
             {
                 filePaths = new List<string>();
                 if (System.IO.Directory.Exists(path))
-                {                    
+                {
                     string[] patterns = searchPatterns.Split(';', System.StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < patterns.Length; ++i)
                     {
@@ -561,7 +561,7 @@ namespace SampleCode
                 for (int i = 0; i < filePaths.Count; ++i)
                 {
                     string assetPath = filePaths[i];
-                    
+
                     int index = assetPath.IndexOf("/Assets");
                     if (index > -1)
                     {
@@ -589,7 +589,7 @@ namespace SampleCode
             private void RefreshPgae(int index)
             {
                 currentPageIndex = Mathf.Clamp(index, 0, maxPageCount - 1);
-                
+
                 if (maxPageCount > pageIndexItemCount)
                 {
                     if (currentPageIndex <= headPageIndex || currentPageIndex >= Mathf.Clamp(headPageIndex + pageIndexItemCount, 0, maxPageCount) - 1)
@@ -616,7 +616,7 @@ namespace SampleCode
 
                     contentList = System.Linq.Enumerable.ToList(e);
                 }
-                
+
                 maxPageCount = Mathf.Max(1, contentList.Count / itemCountPerPage + ((contentList.Count % itemCountPerPage) > 0 ? 1 : 0));
 
                 RefreshPgae(reset ? 0 : currentPageIndex);
@@ -633,7 +633,7 @@ namespace SampleCode
                         repaint = contentList[startIndex].RefreshThumb() || repaint;
                     }
                 }
-                
+
                 return repaint;
             }
 
@@ -644,7 +644,7 @@ namespace SampleCode
 
                 var directory = EditorGUIUtility.IconContent("d_Folder Icon");
                 directory.text = rootPath;
-                
+
                 var directoryHeight = GUILayout.Height(22f);
                 GUILayout.Label(directory, directoryHeight);
 
@@ -679,7 +679,7 @@ namespace SampleCode
                 Object currentAsset = asset;
                 asset = EditorGUILayout.ObjectField(objTitle, asset, assetType, true, GUILayout.MaxWidth(rect.width * 0.5f));
                 GUILayout.FlexibleSpace();
-                
+
                 var filterContent = EditorGUIUtility.IconContent("Search Icon");
                 GUILayout.Label(filterContent, skin.GetStyle("searchField"), GUILayout.Width(20f), GUILayout.Height(20f));
                 string filterValue = GUILayout.TextField(filterText, GUILayout.MaxWidth(120f));
@@ -734,7 +734,7 @@ namespace SampleCode
                     GUILayout.EndVertical();
                     GUILayout.EndScrollView();
                 }
-               
+
                 if (maxPageCount > 1)
                 {
                     GUILayout.BeginHorizontal();
@@ -768,7 +768,7 @@ namespace SampleCode
                             RefreshPgae(maxPageCount - 1);
                         }
                     }
-                    
+
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
                     GUILayout.Space(2f);

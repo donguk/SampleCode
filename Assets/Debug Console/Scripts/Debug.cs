@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SampleCode
+namespace CustomTool
 {
     public static class Debug
     {
@@ -10,7 +10,7 @@ namespace SampleCode
         {
             for (int i = 0; i < newLine_; ++i)
             {
-                SampleCode.Log.Push(string.Empty);
+                CustomTool.Log.Push(string.Empty);
             }
         }
 
@@ -19,13 +19,13 @@ namespace SampleCode
         {
             for (int i = 0; i < newLine_; ++i)
             {
-                SampleCode.Log.Push(string.Empty);
+                CustomTool.Log.Push(string.Empty);
             }
 
             string message = "[Debug] " + message_;
 
 #if UNITY_EDITOR
-            SampleCode.Log.Push(message);
+            CustomTool.Log.Push(message);
 #else
             UnityEngine.Debug.unityLogger.Log("EH.Debug", message);
 #endif
@@ -42,7 +42,7 @@ namespace SampleCode
                 builder.Append(string.Format(message_ + " {0}", turn_.ToString()));
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(builder.ToString());
+                CustomTool.Log.Push(builder.ToString());
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
@@ -94,7 +94,7 @@ namespace SampleCode
                 builder.AppendLine("]");
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(builder.ToString());
+                CustomTool.Log.Push(builder.ToString());
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
@@ -124,11 +124,11 @@ namespace SampleCode
 
                 for (int i = 0; i < newLine_; ++i)
                 {
-                    SampleCode.Log.Push(string.Empty);
+                    CustomTool.Log.Push(string.Empty);
                 }
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(builder.ToString());
+                CustomTool.Log.Push(builder.ToString());
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
@@ -149,7 +149,7 @@ namespace SampleCode
                 string message = (force_ ? "[ForceChangeState] " : "[ChangeState] ") + string.Format("{0}({1}) {2} -> {3}", character_.name, character_.TeamCodeDebugText, character_.GetCurrentStateName(), nextState_);
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(message);
+                CustomTool.Log.Push(message);
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", message);
 #endif
@@ -173,7 +173,7 @@ namespace SampleCode
                 builder.AppendFormat("GlobalTurn: {0} ", processor_.BattleTurnManager.GlobalTurn + 1);
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(builder.ToString());
+                CustomTool.Log.Push(builder.ToString());
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
@@ -200,7 +200,7 @@ namespace SampleCode
                 }
 
 #if UNITY_EDITOR
-                SampleCode.Log.Push(builder.ToString());
+                CustomTool.Log.Push(builder.ToString());
 #else
                 UnityEngine.Debug.unityLogger.Log("EH.Debug", builder.ToString());
 #endif
@@ -213,7 +213,7 @@ namespace SampleCode
             //UnityEditor.EditorApplication.isPaused = true;
 
 #if UNITY_EDITOR
-            SampleCode.Log.Push($"<color=red>{message_}</color>", SampleCode.Log.Category.Error);
+            CustomTool.Log.Push($"<color=red>{message_}</color>", CustomTool.Log.Category.Error);
 #endif
             UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
         }
@@ -224,7 +224,7 @@ namespace SampleCode
             //UnityEditor.EditorApplication.isPaused = true;
 
 #if UNITY_EDITOR
-            if (SampleCode.Log.UniquePush($"<color=red>{message_}</color>", SampleCode.Log.Category.Error))
+            if (CustomTool.Log.UniquePush($"<color=red>{message_}</color>", CustomTool.Log.Category.Error))
 #endif
             {
                 UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
@@ -235,7 +235,7 @@ namespace SampleCode
         public static void LogLua(string message_)
         {
 #if UNITY_EDITOR
-            SampleCode.Log.Push(message_, SampleCode.Log.Category.Lua);
+            CustomTool.Log.Push(message_, CustomTool.Log.Category.Lua);
 #else
             UnityEngine.Debug.unityLogger.LogError("EH.Debug", message_);
 #endif

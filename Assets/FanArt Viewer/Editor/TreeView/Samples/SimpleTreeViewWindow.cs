@@ -62,7 +62,7 @@ namespace ClimbGames.Editor
                 GUI.Box(manipulator.dropArea, "Drop Assets", manipulator.dropStyle);
         }
 
-        [MenuItem("ClimbGames/Samples/Simple TreeView")]
+        [MenuItem("Custome Tools/TreeView/Simple TreeView")]
         public static SimpleTreeViewWindow ShowWindow()
         {
             var window = GetWindow<SimpleTreeViewWindow>();

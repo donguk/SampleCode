@@ -7,16 +7,16 @@ public class SampleMain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SampleCode.Debug.Log("<color=green>SampleMain</color> Start()...");
+        CustomTool.Debug.Log("<color=green>SampleMain</color> Start()...");
 
-        SampleCode.Debug.LogLua("<color=green>SampleMain</color> print log lua");
+        CustomTool.Debug.LogLua("<color=green>SampleMain</color> print log lua");
 
-        SampleCode.Debug.LogError("<color=green>SampleMain</color> print log Error!");
+        CustomTool.Debug.LogError("<color=green>SampleMain</color> print log Error!");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

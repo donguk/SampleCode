@@ -9,7 +9,7 @@ public class DebugConsoleWindow : EditorWindow
 
     private const float ButtonWidth = 80f;
 
-    [MenuItem("Sample Code/Debug Console")]
+    [MenuItem("Custome Tools/Debug Console")]
     public static void Init()
     {
         DebugConsoleWindow window = (DebugConsoleWindow)GetWindow(typeof(DebugConsoleWindow));
@@ -21,7 +21,7 @@ public class DebugConsoleWindow : EditorWindow
 
     private Vector2 scrollVector;
 
-    private GUIStyle style = new GUIStyle();    
+    private GUIStyle style = new GUIStyle();
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class DebugConsoleWindow : EditorWindow
 
         autoRepaintOnSceneChange = true;
 
-        SampleCode.Bitwise.AddRef(ref SampleCode.Log.Categories, (int)SampleCode.Log.Category.Debug);
+        CustomTool.Bitwise.AddRef(ref CustomTool.Log.Categories, (int)CustomTool.Log.Category.Debug);
     }
 
     public enum Ref
@@ -47,7 +47,7 @@ public class DebugConsoleWindow : EditorWindow
 
     private void GenericMenuCallback(object type_)
     {
-        
+
     }
 
     private void OnGUI()
@@ -63,18 +63,18 @@ public class DebugConsoleWindow : EditorWindow
 
         if (GUILayout.Button("Clear", "ToolbarButton", GUILayout.Width(ButtonWidth)))
         {
-            SampleCode.Log.Clear();
+            CustomTool.Log.Clear();
         }
 
         if (GUILayout.Button("Save", "ToolbarButton", GUILayout.Width(ButtonWidth)))
         {
             string fileName = "Log_" + System.DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
-        
+
             string filePath = UnityEditor.EditorUtility.SaveFilePanel("Save", Application.persistentDataPath, fileName, "txt");
-        
+
             if (!string.IsNullOrEmpty(filePath))
             {
-                SampleCode.Log.SaveToLocal(filePath);
+                CustomTool.Log.SaveToLocal(filePath);
             }
         }
 
@@ -97,21 +97,21 @@ public class DebugConsoleWindow : EditorWindow
         GUILayout.FlexibleSpace();
         EditorGUILayout.Separator();
 
-        int length = System.Enum.GetValues(typeof(SampleCode.Log.Category)).Length;
+        int length = System.Enum.GetValues(typeof(CustomTool.Log.Category)).Length;
 
         for (int i = 0; i < length; ++i)
         {
-            SampleCode.Log.Category category = (SampleCode.Log.Category)(0x01 << i);
+            CustomTool.Log.Category category = (CustomTool.Log.Category)(0x01 << i);
 
-            bool value = GUILayout.Toggle(SampleCode.Bitwise.Check(SampleCode.Log.Categories, (int)category), category.ToString(), "ToolbarButton", GUILayout.Width(ToggleWidth));
+            bool value = GUILayout.Toggle(CustomTool.Bitwise.Check(CustomTool.Log.Categories, (int)category), category.ToString(), "ToolbarButton", GUILayout.Width(ToggleWidth));
 
             if (value)
             {
-                SampleCode.Bitwise.AddRef(ref SampleCode.Log.Categories, (int)category);
+                CustomTool.Bitwise.AddRef(ref CustomTool.Log.Categories, (int)category);
             }
             else
             {
-                SampleCode.Bitwise.SubRef(ref SampleCode.Log.Categories, (int)category);
+                CustomTool.Bitwise.SubRef(ref CustomTool.Log.Categories, (int)category);
             }
         }
 
@@ -124,13 +124,13 @@ public class DebugConsoleWindow : EditorWindow
 
         float height = 0;
 
-        List<SampleCode.Log.Message> list = SampleCode.Log.CategorizedLogs;
+        List<CustomTool.Log.Message> list = CustomTool.Log.CategorizedLogs;
 
         int count = list.Count;
 
         for (int i = Mathf.Clamp(count - 1500, 0, count); i < list.Count; ++i)
         {
-            if (SampleCode.Bitwise.Check(SampleCode.Log.Categories, (int)list[i].category))
+            if (CustomTool.Bitwise.Check(CustomTool.Log.Categories, (int)list[i].category))
             {
                 GUILayout.Label("<color=silver>" + list[i].text + "</color>", style);
 

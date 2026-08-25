@@ -59,7 +59,7 @@ namespace ClimbGames.Editor
 
     public class FanArtTreeViewWindow : EditorWindow
     {
-        const string FanArtStoragePath = "Assets/ClimbGames/Resources/FanArt/FanArtData.txt";
+        const string FanArtStoragePath = "Assets/FanArt Viewer/FanArtData.txt";
         Dictionary<string/*guid*/, FanArtData> fanArtInfos;
 
         TreeModel<FanArtTreeElement> treeModel;
@@ -271,7 +271,7 @@ namespace ClimbGames.Editor
                 GUI.Box(manipulator.dropArea, "Drop Assets(png, jpg)", manipulator.dropStyle);
         }
 
-        [MenuItem("ClimbGames/FanArt Viewer")]
+        [MenuItem("Custome Tools/TreeView/FanArt Viewer")]
         public static FanArtTreeViewWindow ShowWindow()
         {
             var window = GetWindow<FanArtTreeViewWindow>();
